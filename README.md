@@ -14,7 +14,7 @@ Coming soon.
 
 ### Formatting
 
-I want to use markdown for productivity when creating essays which have to be exported to docx. I also want these exported docx files to looks as professional and as generally well-presented as possible. The format is docx for two main reasons:
+I want to use markdown for productivity when creating essays which have to be exported to docx. I also want these exported docx files to look as professional and as well-presented as possible. The format is docx for two main reasons:
 
 1. They're required for what I'm doing
 2. They're very well-supported for format conversions (e.g. PDF, EPUB)
