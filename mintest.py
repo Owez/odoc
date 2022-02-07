@@ -5,6 +5,7 @@ md = """# Hello world
 This is a little paragraph with nothing really on it
 
 - One
+    - Test
 - Two
 
 ## Another Section
@@ -16,5 +17,5 @@ This is a little paragraph with nothing really on it
 
 Paragraph"""
 
-odoc = ODoc(md)
+odoc = ODoc(md, True)
 odoc.save("output.docx")
