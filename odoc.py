@@ -42,12 +42,8 @@ class ODoc:
                 # empty line, skip
                 continue
             elif line.startswith("#"):
-                if len(line) > 1 and line[1] != "#":
-                    # title
-                    pass # TODO: cover page pretty please
-                else:
-                    # heading
-                    self._add_heading(line)
+                # heading
+                self._add_heading(line)
             elif line.startswith("-"):
                 # parse bulletpoint indent block
                 skip = self._parse_indents(ind, True)
