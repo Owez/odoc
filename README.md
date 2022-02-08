@@ -24,11 +24,3 @@ I'd rather directly export to something like PDF but it's less editable, convert
 ### Settings
 
 As for settings, there are none. This project purposefully has no export settings as every valid markdown input should result in a heavily opinionated and *good looking* docx file.
-
-### Language
-
-Python was chosen as the language to develop this project with, in competition with Rust and Javascript. Python was chosen because:
-
-- Rust doesn't have great docx bindings; it failed to compile on my machine
-- Javascript is the worst of both worlds unless the situation requires clientside docx exporting on a website, which it doesn't
-- Python has nice bindings and it makes it fast to hack together this project
