@@ -70,7 +70,9 @@ class ODoc:
         def strip_listing(line: str, bulletpoint: bool) -> str:
             """Removes list item or bulletpoint"""
 
-            return (line[1:] if bulletpoint else line[2:]).strip()
+            line = line.strip()
+            line = line[1:] if bulletpoint else line[2:]
+            return line.strip()
 
         (level, self._level_cache) = _get_level(self.lines[from_ind], self._level_cache)
         first_line = strip_listing(self.lines[from_ind], bulletpoint)
@@ -93,8 +95,7 @@ class ODoc:
                     return skipped
                 else:
                     # new paragraph
-                    further_line = strip_listing(further_line, bulletpoint)  # format
-                    lines.append(further_line)  # add
+                    lines.append(further_line)
             else:
                 # not indented
                 break
@@ -207,9 +208,3 @@ def _str_is_listpoint(string: str) -> bool:
     """Checks if a provided string (line) is a listpoint"""
 
     return len(string) > 1 and string[0].isnumeric() and string[1] == "."
-
-
-def _indent_paragraph(paragraph, level: int):
-    """Formats paragraph to level indent"""
-
-    paragraph.paragraph_format.left_indent = Inches(0.25 * level)
