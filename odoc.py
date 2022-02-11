@@ -1,9 +1,12 @@
 from pathlib import Path
 from docx import Document
 import re
+from docx.shared import Inches
 
 
 class ODoc:
+    _level_cache = 0
+
     def __init__(self, md: str, verbose: bool = False) -> None:
         """Creates a new ODoc document from inputted markdown content"""
         # add basics
@@ -64,7 +67,8 @@ class ODoc:
     ) -> int:
         """Parses indentation blocks starting with a bulletpoint if not a list item, returning how many lines to skip"""
 
-        level = _count_chars(self.lines[from_ind], " ")  # TODO: smart use space or tab
+        (level, self._level_cache) = _get_level(self.lines[from_ind], self._level_cache)
+        print("level cache:", self._level_cache)
         first_line = (
             self.lines[from_ind][1:] if bulletpoint else self.lines[from_ind][2:]
         )
@@ -117,6 +121,7 @@ class ODoc:
         """Adds a bulletpoint for provided lines at a given level"""
 
         self._info(f"Adding level {level} bulletpoint")
+        inches = _level_to_inch(level)
 
         pass  # TODO
 
@@ -124,6 +129,7 @@ class ODoc:
         """Adds a listpoint (ordered list) for provided lines at a given level"""
 
         self._info(f"Adding level {level} listpoint")
+        inches = _level_to_inch(level)
 
         pass  # TODO
 
@@ -179,7 +185,27 @@ def _count_chars(line: str, target: str) -> int:
     return count
 
 
+def _get_level(line: str, level_cache: int = 0) -> tuple:
+    """Gets level with the context of the first amount of spaces, returning the formatted level and raw level cache"""
+
+    level = _count_chars(line, " ")
+
+    if level_cache == 0 and level > 1:
+        level_cache = level
+        level = 1
+    elif level != 0:
+        level = level / level_cache
+
+    return (level, level_cache)
+
+
 def _str_is_listpoint(string: str) -> bool:
     """Checks if a provided string (line) is a listpoint"""
 
     return len(string) > 1 and string[0].isnumeric() and string[1] == "."
+
+
+def _level_to_inch(level: int):
+    """Formats levels to indentation"""
+
+    return Inches(0.25 * level)
