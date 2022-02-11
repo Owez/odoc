@@ -33,6 +33,7 @@ As for settings, there are none. This project purposefully has no export setting
 Python was chosen as the language to develop this project with, in competition with Rust and Javascript. Python was chosen because:
 
 - Rust doesn't have great docx bindings; it failed to compile on my machine
+    but its cool otherwise
 - Javascript is the worst of both worlds unless the situation requires clientside docx exporting on a website, which it doesn't
 - Python has nice bindings and it makes it fast to hack together this project"""
 

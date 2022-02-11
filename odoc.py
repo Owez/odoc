@@ -67,12 +67,13 @@ class ODoc:
     ) -> int:
         """Parses indentation blocks starting with a bulletpoint if not a list item, returning how many lines to skip"""
 
+        def strip_listing(line: str, bulletpoint: bool) -> str:
+            """Removes list item or bulletpoint"""
+
+            return (line[1:] if bulletpoint else line[2:]).strip()
+
         (level, self._level_cache) = _get_level(self.lines[from_ind], self._level_cache)
-        print("level cache:", self._level_cache)
-        first_line = (
-            self.lines[from_ind][1:] if bulletpoint else self.lines[from_ind][2:]
-        )
-        first_line = first_line.strip()
+        first_line = strip_listing(self.lines[from_ind], bulletpoint)
         lines = [first_line]
 
         for further_ind, further_line in enumerate(self.lines[from_ind + 1 :]):
@@ -92,7 +93,8 @@ class ODoc:
                     return skipped
                 else:
                     # new paragraph
-                    lines.append(further_line)
+                    further_line = strip_listing(further_line, bulletpoint)  # format
+                    lines.append(further_line)  # add
             else:
                 # not indented
                 break
@@ -121,17 +123,19 @@ class ODoc:
         """Adds a bulletpoint for provided lines at a given level"""
 
         self._info(f"Adding level {level} bulletpoint")
-        inches = _level_to_inch(level)
 
-        pass  # TODO
+        level_style = "" if level == 0 else f" {level + 1}"
+        paragraph = self.doc.add_paragraph("", style="List Bullet" + level_style)
+        self._add_paragraph_runs(lines[0], paragraph)  # TODO: multiple lines
 
     def _add_listpoint(self, lines: list, level: int):
         """Adds a listpoint (ordered list) for provided lines at a given level"""
 
         self._info(f"Adding level {level} listpoint")
-        inches = _level_to_inch(level)
 
-        pass  # TODO
+        level_style = "" if level == 0 else f" {level + 1}"
+        paragraph = self.doc.add_paragraph("", style="List Number" + level_style)
+        self._add_paragraph_runs(lines[0], paragraph)  # TODO: multiple lines
 
     def _add_paragraph(self, line: str):
         """Adds one plain (pure) paragraph of text with styling only from inline markdown"""
@@ -205,7 +209,7 @@ def _str_is_listpoint(string: str) -> bool:
     return len(string) > 1 and string[0].isnumeric() and string[1] == "."
 
 
-def _level_to_inch(level: int):
-    """Formats levels to indentation"""
+def _indent_paragraph(paragraph, level: int):
+    """Formats paragraph to level indent"""
 
-    return Inches(0.25 * level)
+    paragraph.paragraph_format.left_indent = Inches(0.25 * level)
